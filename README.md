@@ -10,7 +10,7 @@ I own probably ~1000 single issues, including several hundred X-Men comics.  Ind
 
 The second big problem is that if I want to know if I own *Uncanny X-Men 267* I have to scroll through a hard-to-read list to see if it's missing (looking at the cover I think I *might* have it).  Even if I take the time to make a dedicated list of things I'm missing, that list will also be hard to read, and will be prone to at least twice the amount of human error.
 
-So the **gutterz**, affectionately named for the space between comic panels (while also being a nod to the fact that I need to get my comic organization act cleaned up) has two big goals I'm aiming for:
+So then **gutterz**, affectionately named for the space between comic panels (while also being a nod to the fact that I need to get my comic organization act cleaned up) has two big goals I'm aiming for:
 
 1. I want it to be easier to enter issues of comics, with meta-data, in bulk, in several different ways.
 
