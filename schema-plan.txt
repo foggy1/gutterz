@@ -1,0 +1,40 @@
+Every comic book will need the following attributes:
+
+COMIC BOOK
+~~~~
+Title*
+Issue number
+Author*
+Artist*
+(Maybe Colorist* if I want to get granular)
+Publisher*
+Publishing schedule*
+Years** (see note)
+Face value*** (see note)
+Genre*
+
+Each category marked with one star will need its own table since it will bear a one-to-many relationship to each comic.  I don't know the best practice for handling instances of multiple authors or artists.  My gut feeling right now is that if an issue has multiple authors, I add a row to the author table dedicated to a string containing both authors, and I could work with a string splitter on "," in Ruby in order to check for multiple authors/artists when necessary.
+
+TITLE
+~~~~
+Name
+Year start
+Year finish
+**NOTE: Comics are dumb and otherwise identical titles have distinct publishing runs demarcated by parenthetical years of origin (X-Men 196x and X-Men 201x are distinct titles).  I think this is the best way to handle publishing years, since it will also allow me to help myself to the start year for each title.
+
+AUTHOR
+~~~~
+First name
+Last name
+
+ARTIST
+~~~~
+First name
+Last name
+
+(Colorist will be the same if I decide to include one)
+
+PUBLISHER
+~~~~
+Name
+
