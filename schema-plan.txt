@@ -4,7 +4,7 @@ COMIC BOOK
 ~~~~
 Title*
 Issue number
-Author*
+Writer*
 Artist*
 (Maybe Colorist* if I want to get granular)
 Publisher*
@@ -24,14 +24,13 @@ Year start
 Year finish
 **NOTE: Comics are dumb and otherwise identical titles have distinct publishing runs demarcated by parenthetical years of origin (X-Men 196x and X-Men 201x are distinct titles).  I think this is the best way to handle publishing years, since it will also allow me to help myself to the start year for each title.
 
-Another oddity: often, but not always, the writer and artist are the same person.  Additionally, sometimes the writer of one thing is the artist of another.  I could have a dedicated artist table and a dedicated author table, but doubling the people in some cases (there would be two Frank Millers for sure, for instance) seems against the spirit of even having dedicated tables.  Still, I might want compartmentalized accounts of what writers I have comics by OR what artists I have comics by.  So, I'll use two boolean columns in an otherwise unified table.
-
-CREATORS
+WRITERS
 ~~~~
-First name
-Last name
-Writer (Boolean!)
-Artist (Boolean!)
+Name
+
+ARTISTS
+~~~~
+Name
 
 PUBLISHERS
 ~~~~
