@@ -31,5 +31,57 @@ create_issue_table = <<-SQL
     )
 SQL
 
+create_title_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS titles (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255),
+        year_start INT,
+        year_end INT
+    )
+SQL
+
+create_writer_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS writers (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255)
+    )
+    SQL
+
+create_artist_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS artists (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255)
+    )
+    SQL
+
+create_colorist_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS colorists (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255)
+    )
+    SQL
+
+
+create_publisher_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS publishers (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255)
+    )
+    SQL
+
+create_genre_table = <<-SQL
+    CREATE TABLE IF NOT EXISTS genres (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(255)
+    )
+    SQL
+
+
 #test this table creation
 db.execute(create_issue_table)
+db.execute(create_publisher_table)
+db.execute(create_writer_table)
+db.execute(create_artist_table)
+db.execute(create_colorist_table)
+db.execute(create_genre_table)
+db.execute(create_title_table)
