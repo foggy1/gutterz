@@ -5,7 +5,7 @@
 require 'sqlite3'
 require_relative 'table_maker'
 DB.results_as_hash = true
-# # DB.execute('INSERT INTO writers (name) VALUES ("Grant Morrison")')
-# writers = DB.execute('SELECT * FROM writers')
-# puts writers
+# DB.execute('INSERT INTO writers (name) VALUES ("Grant Morrison")')
+writers = DB.execute('SELECT * FROM writers')
+p writers
 
