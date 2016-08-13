@@ -33,13 +33,15 @@ require 'sqlite3'
         CREATE TABLE IF NOT EXISTS titles (
             id INTEGER PRIMARY KEY,
             name VARCHAR(255),
+            UNIQUE(name)
         )
     SQL
 
     create_year_table = <<-SQL
         CREATE TABLE IF NOT EXISTS years (
             id INTEGER PRIMARY KEY,
-            year INT
+            year INT,
+            UNIQUE(year)
         )
     SQL
 
@@ -47,6 +49,7 @@ require 'sqlite3'
         CREATE TABLE IF NOT EXISTS schedules (
             id INTEGER PRIMARY KEY,
             name VARCHAR(255),
+            UNIQUE(name)
         )
     SQL
 

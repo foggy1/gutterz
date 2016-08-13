@@ -11,13 +11,13 @@ require_relative 'table_maker'
 
 
 BASIC_INFO_VIEW = <<-SQL
-                                  select titles.name, titles.year_start, issues.number, 
-                                  writers.name, artists.name, publishers.name, genres.name, issues.schedule,
-                                  issues.quantity, issues.cover_price from titles join issues on 
-                                  titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
+                                  select titles.name, years.year, issues.number, 
+                                  writers.name, artists.name, publishers.name, genres.name, schedules.name,
+                                  issues.quantity, issues.cover_price from titles join years on years.id = issues.year_id
+                                  join issues on titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
                                   artists on issues.artist_id = artists.id join publishers on 
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id
+                                  genres.id join schedules on schedules.id = issues.schedule_id
                           SQL
 
 # I'm going to want every comic that gets entered to have the same
@@ -28,22 +28,26 @@ BASIC_INFO_VIEW = <<-SQL
 # are first added to the database.
 def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
     # First insert compartmentalized values into their respective tables
-    DB.execute("INSERT INTO titles (name, year_start) VALUES (?, ?)", [title, year])
+    DB.execute("INSERT OR IGNORE INTO titles (name) VALUES (?)", [title])
+    DB.execute("INSERT OR IGNORE INTO years(year) VALUES (?)", [year])
     DB.execute("INSERT OR IGNORE INTO writers (name) VALUES (?)", [writer])
     DB.execute("INSERT OR IGNORE INTO artists (name) VALUES (?)", [artist])
-    DB.execute("INSERT INTO publishers (name) VALUES (?)", [publisher])
-    DB.execute("INSERT INTO genres (name) VALUES (?)", [genre])
+    DB.execute("INSERT OR IGNORE INTO publishers (name) VALUES (?)", [publisher])
+    DB.execute("INSERT OR IGNORE INTO genres (name) VALUES (?)", [genre])
+    DB.execute("INSERT OR IGNORE INTO schedules (name) VALUES (?)", [schedule])
     # Then grab the relevant id's to be foreign keys
-    title_id = DB.execute("SELECT id FROM titles WHERE name=(?) AND year_start=(?)", [title, year])
+    title_id = DB.execute("SELECT id FROM titles WHERE name=(?)", [title])
+    year_id = DB.execute("SELECT id FROM years WHERE year=(?)", [year])
     writer_id = DB.execute("SELECT id FROM writers WHERE name=(?)", [writer])
     artist_id = DB.execute("SELECT id FROM artists WHERE name=(?)", [artist])
     publisher_id = DB.execute("SELECT id FROM publishers WHERE name=(?)", [publisher])
     genre_id = DB.execute("SELECT id FROM genres WHERE name=(?)", [genre])
+    schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
     # Then put it all together in the issue table
-    DB.execute("INSERT INTO issues (title_id, number, writer_id, artist_id, publisher_id, genre_id,
-                       schedule, quantity, cover_price)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       [title_id, issue_number, writer_id, artist_id, publisher_id, genre_id, schedule, 
+    DB.execute("INSERT INTO issues (title_id, year_id, number, writer_id, artist_id, publisher_id, genre_id,
+                       schedule_id, quantity, cover_price)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       [title_id, year_id, issue_number, writer_id, artist_id, publisher_id, genre_id, schedule_id, 
                         quantity, price])
 end
 
@@ -56,6 +60,9 @@ def view_a_comic
     title = gets.chomp
     print "What issue number? "
     number = gets.to_i
+    # if more than one pops up, we'll have an array longer than one.  In that case, we'll
+    # use basic info and pick out the years and then format a string with the title and year
+    # asking which one they meant.
     narrow_comic_search = BASIC_INFO_VIEW + ' WHERE '
 end
 
@@ -74,6 +81,4 @@ add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero
 
 
 comics = DB.execute(BASIC_INFO_VIEW)
-p comics
-
-p BASIC_INFO_VIEW + 'where'
+comics.each { |issue| puts issue.join' '}
