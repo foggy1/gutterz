@@ -66,6 +66,17 @@ def view_a_comic
     narrow_comic_search = BASIC_INFO_VIEW + ' WHERE '
 end
 
+# Take in all the data from the user that's needed to add a comic
+# Check that that data, in its array form, does not already exist in our database as such
+# If it does, we'll prompt the user to either update the quantity of that item
+# or re-enter the info
+
+def comic_exists?(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
+    comics = DB.execute(BASIC_INFO_VIEW)
+    if comics.index([title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price])
+        return true
+    end
+end
 
 # TEST CODE
 
@@ -82,3 +93,7 @@ add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero
 
 comics = DB.execute(BASIC_INFO_VIEW)
 comics.each { |issue| puts issue.join' '}
+p comics[0]
+p comics.index(["Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+                     1, 399])
+p comics.index([4])
