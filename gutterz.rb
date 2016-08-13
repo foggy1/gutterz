@@ -38,18 +38,32 @@ def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, sch
                         quantity, price])
 end
 
+# Let's add a function to make single issue data readable
+# We'll have to prompt them for what title they'd like to view and what number
+# If there are two distinct runs of the comic with that title and number, then we'll prompt
+# them to pick the edition they're talking about based on its start date
+def view_a_comic
+
+end
+
+
+# TEST CODE
+
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
 # p num
 
-add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
-                    1, 150)
+# add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
+                    # 1, 150)
 
-a_comic = DB.execute('select titles.name, titles.year_start, issues.number, 
-                                  writers.name, artists.name, publishers.name, genres.name,  
+basic_info_view = <<-SQL
+                                  select titles.name, titles.year_start, issues.number, 
+                                  writers.name, artists.name, publishers.name, genres.name, issues.schedule,
                                   issues.quantity, issues.cover_price from titles join issues on 
                                   titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
                                   artists on issues.artist_id = artists.id join publishers on 
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id;
-')
-p a_comic
+                                  genres.id
+                          SQL
+
+comics = DB.execute(basic_info_view)
+p comics
