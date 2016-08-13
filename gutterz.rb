@@ -29,13 +29,11 @@ BASIC_INFO_VIEW = <<-SQL
 # are first added to the database.
 def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
     # First insert compartmentalized values into their respective tables
-    # if comic_exists?(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
-    #     puts "You already have this comic in your collection."
-    #     print "Would you like to add this to the quantity of that comic (y/n)? "
-    #     answer = gets.chomp
-    #     if answer == 'y'
-
-    # end
+    if get_id(title, year, issue_number, schedule)
+        comic_id = get_id(title, year, issue_number, schedule)
+        update_quantity(comic_id)
+        return
+    end
     DB.execute("INSERT OR IGNORE INTO titles (name) VALUES (?)", [title])
     DB.execute("INSERT OR IGNORE INTO years(year) VALUES (?)", [year])
     DB.execute("INSERT OR IGNORE INTO writers (name) VALUES (?)", [writer])
@@ -79,12 +77,12 @@ end
 # If it does, we'll prompt the user to either update the quantity of that item
 # or re-enter the info
 
-def comic_exists?(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
-    comics = DB.execute(BASIC_INFO_VIEW)
-    if comics.index([title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price])
-        return true
-    end
-end
+# def comic_exists?(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
+#     comics = DB.execute(BASIC_INFO_VIEW)
+#     if comics.index([title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price])
+#         return true
+#     end
+# end
 
 # Need a function that updates the quantity of a single issue
 # It will need all the basic identifying issue info
@@ -96,8 +94,14 @@ def update_quantity(comic_id)
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
                                   genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])[0]
     puts "You already have #{quantity} copies of #{title} (#{year}) \##{number}."
-    print "How many copies of #{title} (#{year}) \##{number} do you want to add? "
-    quantity += gets.to_i
+    print "How many copies of #{title} (#{year}) \##{number} do you want to add (or type 'none')? "
+    add_quantity = gets.chomp
+    if add_quantity == 'none'
+        return false
+    else
+        add_quantity_int = add_quantity.to_i
+        quantity += add_quantity_int
+    end
     DB.execute("UPDATE issues SET quantity = (?) WHERE id = (?)", [quantity, comic_id])
 end
 
@@ -112,7 +116,7 @@ def get_id(title, year, issue_number, schedule)
     schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
     comic_id = DB.execute("select id from issues where title_id = (?) and year_id = (?) and number = (?) and schedule_id = (?)", 
                                        [title_id, year_id, issue_number, schedule_id])
-    comic_id
+    comic_id[0]
 end
 
 # TEST CODE
@@ -120,12 +124,12 @@ end
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
 # p num
 
-# add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
-#                      1, 150)
-# add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
-#                      1, 150)
-# add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
-#                      1, 399)
+add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
+                     1, 150)
+add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
+                     1, 150)
+add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+                     1, 399)
 
 
 comics = DB.execute(BASIC_INFO_VIEW)
@@ -137,3 +141,4 @@ comics.each { |issue| puts issue.join' '}
 
 p get_id("Superman", 2013, 1, "Ongoing")
 update_quantity(3)
+p get_id("Nah tho", 2, 4, "poops")
