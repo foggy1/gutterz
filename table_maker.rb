@@ -38,14 +38,16 @@ require 'sqlite3'
     create_writer_table = <<-SQL
         CREATE TABLE IF NOT EXISTS writers (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            UNIQUE(name)
         )
         SQL
 
     create_artist_table = <<-SQL
         CREATE TABLE IF NOT EXISTS artists (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            UNIQUE(name)
         )
         SQL
 
