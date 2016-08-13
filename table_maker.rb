@@ -8,17 +8,20 @@ require 'sqlite3'
         CREATE TABLE IF NOT EXISTS issues (
             id INTEGER PRIMARY KEY,
             number INT,
-            schedule VARCHAR(255),
+            schedule_id INT,
             cover_price INT,
             resale INT,
             quantity INT,
             title_id INT,
+            year_id INT,
             writer_id INT,
             artist_id INT,
             publisher_id INT,
             colorist_id INT,
             genre_id INT,
+            FOREIGN KEY (schedule_id) REFERENCES schedules(id),
             FOREIGN KEY (title_id) REFERENCES titles(id),
+            FOREIGN KEY (year_id) REFERENCES years(id),
             FOREIGN KEY (writer_id) REFERENCES writers(id),
             FOREIGN KEY (artist_id) REFERENCES artists(id),
             FOREIGN KEY (publisher_id) REFERENCES publishers(id),
@@ -30,8 +33,20 @@ require 'sqlite3'
         CREATE TABLE IF NOT EXISTS titles (
             id INTEGER PRIMARY KEY,
             name VARCHAR(255),
-            year_start INT,
-            year_end INT
+        )
+    SQL
+
+    create_year_table = <<-SQL
+        CREATE TABLE IF NOT EXISTS years (
+            id INTEGER PRIMARY KEY,
+            year INT
+        )
+    SQL
+
+    create_schedule_table = <<-SQL
+        CREATE TABLE IF NOT EXISTS schedules (
+            id INTEGER PRIMARY KEY,
+            name VARCHAR(255),
         )
     SQL
 
@@ -54,7 +69,8 @@ require 'sqlite3'
     create_colorist_table = <<-SQL
         CREATE TABLE IF NOT EXISTS colorists (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            UNIQUE(name)
         )
         SQL
 
@@ -62,14 +78,16 @@ require 'sqlite3'
     create_publisher_table = <<-SQL
         CREATE TABLE IF NOT EXISTS publishers (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            UNIQUE(name)
         )
         SQL
 
     create_genre_table = <<-SQL
         CREATE TABLE IF NOT EXISTS genres (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            UNIQUE(name)
         )
         SQL
 
@@ -82,3 +100,5 @@ require 'sqlite3'
     DB.execute(create_colorist_table)
     DB.execute(create_genre_table)
     DB.execute(create_title_table)
+    DB.execute(create_year_table)
+    DB.execute(create_schedule_table)
