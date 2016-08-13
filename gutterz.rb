@@ -88,11 +88,24 @@ end
 
 # Need a function that updates the quantity of a single issue
 # It will need all the basic identifying issue info
-def update_quantity( )
+def update_quantity(comic_id)
+    title, year, number, quantity = DB.execute("select titles.name, years.year, issues.number, issues.quantity
+                                  from titles join years on years.id = issues.year_id
+                                  join issues on titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
+                                  artists on issues.artist_id = artists.id join publishers on 
+                                  issues.publisher_id = publishers.id join genres on issues.genre_id = 
+                                  genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])[0]
+    puts "You already have #{quantity} copies of #{title} (#{year}) \##{number}."
+    print "How many copies of #{title} (#{year}) \##{number} do you want to add? "
+    quantity += gets.to_i
+    DB.execute("UPDATE issues SET quantity = (?) WHERE id = (?)", [quantity, comic_id])
 end
 
 # Need a function that gets the id of a specific comic issue
 # Working with an id will just be so much better than anything else
+# No two comics will ever have the same title, year, issue number, AND schedule
+# Those things together essentially define a single issue as being a single issue
+# So those values passed into this function will suffice.
 def get_id(title, year, issue_number, schedule)
     title_id = DB.execute("SELECT id FROM titles WHERE name=(?)", [title])
     year_id = DB.execute("SELECT id FROM years WHERE year=(?)", [year])
@@ -123,3 +136,4 @@ comics.each { |issue| puts issue.join' '}
 # p comics.index([4])
 
 p get_id("Superman", 2013, 1, "Ongoing")
+update_quantity(3)
