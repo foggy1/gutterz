@@ -1,0 +1,8 @@
+I just want to rant about going through this process so that I remember later what it was first like to work with databases.
+
+I'm especially motivated to write about this given the absurdity of the thing that just happened to me.  After programming the initial add_a_comic method, SQL (via Ruby) threw a weird exception at me:
+`bind_param': bind or column index out of range (SQLite3::RangeException)
+
+The thing is, I had actually gone through pains to make sure that I had the same number of columns and arguments and that all of them were pointing to the right things.  Googling this exception led me to a bunch of folks who were confused about how to interpolate strings in order to pass them to SQL; some were confused about this generally, others were worried about SQL injection.  But having watched the very helpful video, I knew I was using the right method, and though apparently there's a #prepare method that is also helpful, I didn't think I needed it.
+
+The one mistake I saw was that I forgot a comma in my enumeration of the columns in which to insert the values.  But upon trying the code again, it kept throwing the exception.  Long story short, I had forgotten that the original exception thrown was about the comma and that this was a NEW exception: an exception being thrown because the part of the method that was searching for foreign keys on a name basis was now grabbing MULTIPLE FOREIGN KEYS.  At least I knew the part of my program that added the individual pieces worked well.

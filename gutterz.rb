@@ -9,15 +9,7 @@ require_relative 'table_maker'
 # writers = DB.execute('SELECT * FROM writers')
 # p writers
 
-a_comic = DB.execute('select titles.name, titles.year_start, issues.number, 
-                                  writers.name, artists.name, publishers.name, genres.name,  
-                                  issues.quantity, issues.cover_price from titles join issues on 
-                                  titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
-                                  artists on issues.artist_id = artists.id join publishers on 
-                                  issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id;
-')
-p a_comic
+
 
 # I'm going to want every comic that gets entered to have the same
 # order amount of basic data: the title, the year that title started, the comic's issue number
@@ -39,12 +31,25 @@ def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, sch
     publisher_id = DB.execute("SELECT id FROM publishers WHERE name=(?)", [publisher])
     genre_id = DB.execute("SELECT id FROM genres WHERE name=(?)", [genre])
     # Then put it all together in the issue table
-    DB.execute("INSERT INTO issues (title_id, number, writer_id, artist_id, publisher_id, genre_id
+    DB.execute("INSERT INTO issues (title_id, number, writer_id, artist_id, publisher_id, genre_id,
                        schedule, quantity, cover_price)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        [title_id, issue_number, writer_id, artist_id, publisher_id, genre_id, schedule, 
                         quantity, price])
 end
 
-num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
-p num
+# num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
+# p num
+
+add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
+                    1, 150)
+
+a_comic = DB.execute('select titles.name, titles.year_start, issues.number, 
+                                  writers.name, artists.name, publishers.name, genres.name,  
+                                  issues.quantity, issues.cover_price from titles join issues on 
+                                  titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
+                                  artists on issues.artist_id = artists.id join publishers on 
+                                  issues.publisher_id = publishers.id join genres on issues.genre_id = 
+                                  genres.id;
+')
+p a_comic
