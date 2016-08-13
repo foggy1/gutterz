@@ -20,6 +20,7 @@ BASIC_INFO_VIEW = <<-SQL
                                   genres.id join schedules on schedules.id = issues.schedule_id
                           SQL
 
+
 # I'm going to want every comic that gets entered to have the same
 # order amount of basic data: the title, the year that title started, the comic's issue number
 # the writer's name, the artist's name, the publisher's name, the genre, the quantity of that issue,
@@ -28,6 +29,13 @@ BASIC_INFO_VIEW = <<-SQL
 # are first added to the database.
 def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
     # First insert compartmentalized values into their respective tables
+    # if comic_exists?(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
+    #     puts "You already have this comic in your collection."
+    #     print "Would you like to add this to the quantity of that comic (y/n)? "
+    #     answer = gets.chomp
+    #     if answer == 'y'
+
+    # end
     DB.execute("INSERT OR IGNORE INTO titles (name) VALUES (?)", [title])
     DB.execute("INSERT OR IGNORE INTO years(year) VALUES (?)", [year])
     DB.execute("INSERT OR IGNORE INTO writers (name) VALUES (?)", [writer])
@@ -78,22 +86,40 @@ def comic_exists?(title, year, issue_number, writer, artist, publisher, genre, s
     end
 end
 
+# Need a function that updates the quantity of a single issue
+# It will need all the basic identifying issue info
+def update_quantity( )
+end
+
+# Need a function that gets the id of a specific comic issue
+# Working with an id will just be so much better than anything else
+def get_id(title, year, issue_number, schedule)
+    title_id = DB.execute("SELECT id FROM titles WHERE name=(?)", [title])
+    year_id = DB.execute("SELECT id FROM years WHERE year=(?)", [year])
+    schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
+    comic_id = DB.execute("select id from issues where title_id = (?) and year_id = (?) and number = (?) and schedule_id = (?)", 
+                                       [title_id, year_id, issue_number, schedule_id])
+    comic_id
+end
+
 # TEST CODE
 
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
 # p num
 
-add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
-                     1, 150)
-add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
-                     1, 150)
-add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
-                     1, 399)
+# add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
+#                      1, 150)
+# add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
+#                      1, 150)
+# add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+#                      1, 399)
 
 
 comics = DB.execute(BASIC_INFO_VIEW)
 comics.each { |issue| puts issue.join' '}
-p comics[0]
-p comics.index(["Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
-                     1, 399])
-p comics.index([4])
+# p comics[0]
+# p comics.index(["Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+#                      1, 399])
+# p comics.index([4])
+
+p get_id("Superman", 2013, 1, "Ongoing")
