@@ -27,8 +27,7 @@ BASIC_INFO_VIEW = <<-SQL
 # and the cover price.  We will prompt the user for these things in turn, and then
 # pass them into this function, which will be the rudimentary function by which things
 # are first added to the database.
-def add_a_comic
-    info_array = get_info
+def add_a_comic(info_array)
     title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = info_array
     # First insert compartmentalized values into their respective tables
     if get_id(title, year, issue_number, schedule)
@@ -189,6 +188,27 @@ def get_info
     return title, year, number, writer, artist, publisher, genre, schedule, quantity, price
 end
 
+# After a user adds a comic, I want to ask them if they'd like to add more of that particular comic
+# One really useful feature would be to allow them to enter a range of issue numbers
+# Comics are annoying in that writers and artists especially consantly change
+# We'll just also have to add a different method that allows them to update relevant info for a given range as well
+# We'll take in the info that was passed in in order to add a comic in addition to the range of issues to be added
+def add_a_batch(info_array)
+    print "Would you like to add a batch of the comic you just added (y/n)?"
+    answer = gets.chomp
+    if answer == 'y'
+        print "Please enter an issue range, with the numbers separated only by a space: "
+        range_array = gets.chomp.split
+        range = (range_array[0]..range_array[1])
+        title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = info_array
+        range.each do |num|
+            add_a_comic([title, year, num, writer, artist, publisher, genre, schedule, quantity, price])
+        end
+    end
+end
+
+
+
 # TEST CODE
 
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
@@ -231,7 +251,9 @@ loop do
     print "Add or view (type 'add', 'view', or 'exit')? "
     operation = gets.chomp
     if operation == 'add'
-        add_a_comic
+        info_array = get_info
+        add_a_comic(info_array)
+        add_a_batch(info_array)
     elsif operation == 'view'
         view_a_comic
     elsif operation == 'exit'
