@@ -197,8 +197,8 @@ def add_a_batch(info_array)
     print "Would you like to add a batch of the comic you just added (y/n)?"
     answer = gets.chomp
     if answer == 'y'
-        print "Please enter an issue range, with the numbers separated only by a space: "
-        range_array = gets.chomp.split
+        print "Please enter an issue range with a dash, (e.g. 110-117): "
+        range_array = gets.chomp.split('-')
         range = (range_array[0]..range_array[1])
         title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = info_array
         range.each do |num|
