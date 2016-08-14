@@ -30,7 +30,7 @@ def add_a_comic(info_array)
         update_quantity(comic_id)
         return
     end
-        # First insert compartmentalized values into their respective tables
+    # First insert compartmentalized values into their respective tables
     DB.execute("INSERT OR IGNORE INTO titles (name) VALUES (?)", [title])
     DB.execute("INSERT OR IGNORE INTO years(year) VALUES (?)", [year])
     DB.execute("INSERT OR IGNORE INTO writers (name) VALUES (?)", [writer])
@@ -244,7 +244,7 @@ end
 # p new_get_info
 
 ## DRIVER CODE
-puts "Welcome to Gutterz 1.0!"
+puts "Welcome to Gutterz 1.1!"
 if DB.execute("SELECT * FROM issues") == []
     
     puts "Currently you can add a comic and view the info of any single issues you have added!"
