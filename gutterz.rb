@@ -69,7 +69,31 @@ def view_a_comic
     # if more than one pops up, we'll have an array longer than one.  In that case, we'll
     # use basic info and pick out the years and then format a string with the title and year
     # asking which one they meant.
-    narrow_comic_search = BASIC_INFO_VIEW + ' WHERE '
+    comic_array = narrow_it_down(title, number)
+ 
+
+end
+
+# Functionally decompose the part of the comic viewing method where
+# we ask the user to narrow it down
+def narrow_it_down(title, number)
+    narrow_comic_search = DB.execute(BASIC_INFO_VIEW + " WHERE titles.name = (?) and issues.number = (?)", [title, number])
+    if narrow_comic_search.length > 1
+        
+        puts "Whoops! You have that issue number from more than one series!"
+        narrow_comic_search.each do |comic|
+             title, year, issue_number, schedule = comic[0], comic[1], comic[2], comic[7]
+             current_id = get_id(title, year, issue_number, schedule)
+             puts "#{current_id}: #{title}(#{year}) #{issue_number} #{schedule}"
+        end
+        puts "Which exact series did you want that issue from (enter its index number to the left)?: "
+        index = gets.to_i
+        comic = DB.execute(BASIC_INFO_VIEW + " WHERE issues.id = (?)", [index])
+        return comic
+    else
+        comic = narrow_comic_search
+        return comic
+    end
 end
 
 # Take in all the data from the user that's needed to add a comic
@@ -92,7 +116,7 @@ def update_quantity(comic_id)
                                   join issues on titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
                                   artists on issues.artist_id = artists.id join publishers on 
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])[0]
+                                  genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])
     puts "You already have #{quantity} copies of #{title} (#{year}) \##{number}."
     print "How many copies of #{title} (#{year}) \##{number} do you want to add (or type 'none')? "
     add_quantity = gets.chomp
@@ -116,7 +140,11 @@ def get_id(title, year, issue_number, schedule)
     schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
     comic_id = DB.execute("select id from issues where title_id = (?) and year_id = (?) and number = (?) and schedule_id = (?)", 
                                        [title_id, year_id, issue_number, schedule_id])
-    comic_id[0]
+    if comic_id[0] == nil
+        return nil
+    else
+        return comic_id[0][0]
+    end
 end
 
 # TEST CODE
@@ -124,11 +152,13 @@ end
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
 # p num
 
-add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
-                     1, 150)
-add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
-                     1, 150)
-add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+# add_a_comic("Superman", 1938, 512, "Karl Kesel", "Barry Kitson", "DC", "Superhero", "Ongoing",
+#                      1, 150)
+# add_a_comic("Superman", 1938, 513, "Karl Kesel, Barry Kitson", "Barry Kitson", "DC", "Superhero", "Ongoing",
+#                      1, 150)
+# add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+#                      1, 399)
+add_a_comic("Superman", 1938, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
                      1, 399)
 
 
@@ -139,6 +169,8 @@ comics.each { |issue| puts issue.join' '}
 #                      1, 399])
 # p comics.index([4])
 
-p get_id("Superman", 2013, 1, "Ongoing")
-update_quantity(3)
-p get_id("Nah tho", 2, 4, "poops")
+# p get_id("Superman", 2013, 1, "Ongoing")
+# update_quantity(3)
+# p get_id("Nah tho", 2, 4, "poops")
+
+p view_a_comic
