@@ -163,30 +163,77 @@ def get_id(title, year, issue_number, schedule)
     end
 end
 
-def get_info
-    print "Title: "
-    title = gets.chomp
-    print "Year this title began serialization: "
-    year = gets.to_i
-    print "Issue number: "
-    number = gets.to_i
-    puts "Note: please enter multiple writers or artists alphabetically by last name, separated by commas."
-    print "Writer(s): "
-    writer = gets.chomp
-    print "Artist(s): "
-    artist = gets.chomp
-    print "Publisher: "
-    publisher = gets.chomp
-    print "Genre (e.g. Superhero, Sci-fi, Autobio, Cartoon): "
-    genre = gets.chomp
-    print "Publishing schedule (e.g. Ongoing, Limited, One-shot): "
-    schedule = gets.chomp
-    print "How many copies: "
-    quantity = gets.to_i
-    print "Cover price in cents: "
-    price = gets.to_i
-    return title, year, number, writer, artist, publisher, genre, schedule, quantity, price
+# def get_info
+#     print "Title: "
+#     title = gets.chomp
+#     print "Year this title began serialization: "
+#     year = gets.to_i
+#     print "Issue number: "
+#     number = gets.to_i
+#     puts "Note: please enter multiple writers or artists alphabetically by last name, separated by commas."
+#     print "Writer(s): "
+#     writer = gets.chomp
+#     print "Artist(s): "
+#     artist = gets.chomp
+#     print "Publisher: "
+#     publisher = gets.chomp
+#     print "Genre (e.g. Superhero, Sci-fi, Autobio, Cartoon): "
+#     genre = gets.chomp
+#     print "Publishing schedule (e.g. Ongoing, Limited, One-shot): "
+#     schedule = gets.chomp
+#     print "How many copies: "
+#     quantity = gets.to_i
+#     print "Cover price in cents: "
+#     price = gets.to_i
+#     return title, year, number, writer, artist, publisher, genre, schedule, quantity, price
+# end
+
+# Cureently get_info is inconevenient
+# If the user makes a mistake, they have to live with it or escape the entire program
+# new get info will loop 10 times for each piece of data, changing the prompt each time
+# and then appending the result onto the array
+# if the user types 'go back' to edit something, it will not append go back and will rewrite
+# the previous value in the array to be returned
+def new_get_info
+    puts "Please enter the relevant info as prompted."
+    puts "If you make a mistake on the previous piece of info type 'go back' to re-enter."
+    info_array = []
+    n = 1
+    until n > 10
+        case n
+        when 1
+             print "Title: "
+        when 2
+            print "Year this title began serialization: "
+        when 3
+             print "Issue number: "
+         when 4
+            puts "Note: please enter multiple writers or artists alphabetically by last name, separated by commas."
+            print "Writer(s): "
+        when 5
+            print "Artist(s): "
+        when 6
+            print "Publisher: "
+        when 7
+            print "Genre (e.g. Superhero, Sci-fi, Autobio, Cartoon): "
+        when 8
+            print "Publishing schedule (e.g. Ongoing, Limited, One-shot): "
+        when 9
+            print "How many copies: "
+        when 10
+            print "Cover price in cents: "
+        end
+        input = gets.chomp
+        if input == 'go back'
+            n -= 1
+            redo
+        end
+        info_array[n-1] = input
+        n += 1
+    end
+    return info_array
 end
+
 
 # After a user adds a comic, I want to ask them if they'd like to add more of that particular comic
 # One really useful feature would be to allow them to enter a range of issue numbers
@@ -194,7 +241,7 @@ end
 # We'll just also have to add a different method that allows them to update relevant info for a given range as well
 # We'll take in the info that was passed in in order to add a comic in addition to the range of issues to be added
 def add_a_batch(info_array)
-    print "Would you like to add a batch of the comic you just added (y/n)?"
+    print "Would you like to add a batch of the comic you just added (y/n)? "
     answer = gets.chomp
     if answer == 'y'
         print "Please enter an issue range with a dash, (e.g. 110-117): "
@@ -237,6 +284,8 @@ end
 
 # p view_a_comic
 
+# p new_get_info
+
 ## DRIVER CODE
 puts "Welcome to Gutterz 1.0!"
 if DB.execute("SELECT * FROM issues") == []
@@ -251,7 +300,7 @@ loop do
     print "Add or view (type 'add', 'view', or 'exit')? "
     operation = gets.chomp
     if operation == 'add'
-        info_array = get_info
+        info_array = new_get_info
         add_a_comic(info_array)
         add_a_batch(info_array)
     elsif operation == 'view'
@@ -263,3 +312,4 @@ loop do
         redo
     end
 end
+
