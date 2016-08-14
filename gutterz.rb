@@ -27,7 +27,8 @@ BASIC_INFO_VIEW = <<-SQL
 # and the cover price.  We will prompt the user for these things in turn, and then
 # pass them into this function, which will be the rudimentary function by which things
 # are first added to the database.
-def add_a_comic(title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price)
+def add_a_comic(info_array)
+    title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = info_array
     # First insert compartmentalized values into their respective tables
     if get_id(title, year, issue_number, schedule)
         comic_id = get_id(title, year, issue_number, schedule)
@@ -156,6 +157,31 @@ def get_id(title, year, issue_number, schedule)
     end
 end
 
+def get_info
+    print "Title: "
+    title = gets.chomp
+    print "Year this title began serialization: "
+    year = gets.to_i
+    print "Issue number: "
+    number = gets.to_i
+    puts "Note: please enter multiple writers or artists alphabetically by last name, separated by commas."
+    print "Writer(s): "
+    writer = gets.chomp
+    print "Artist(s): "
+    artist = gets.chomp
+    print "Publisher: "
+    publisher = gets.chomp
+    print "Genre (e.g. Superhero, Sci-fi, Autobio, Cartoon): "
+    genre = gets.chomp
+    print "Publishing schedule (e.g. Ongoing, Limited, One-shot): "
+    schedule = gets.chomp
+    print "How many copies: "
+    quantity = gets.to_i
+    print "Cover price in cents: "
+    price = gets.to_i
+    return title, year, number, writer, artist, publisher, genre, schedule, quantity, price
+end
+
 # TEST CODE
 
 # num = DB.execute('select id from writers where name="Grant Morrison"')[0][0]
@@ -167,12 +193,12 @@ end
 #                      1, 150)
 # add_a_comic("Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
 #                      1, 399)
-add_a_comic("Superman", 1938, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
-                     1, 399)
+# add_a_comic("Superman", 1938, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
+                     # 1, 399)
 
 
-comics = DB.execute(BASIC_INFO_VIEW)
-comics.each { |issue| puts issue.join' '}
+# comics = DB.execute(BASIC_INFO_VIEW)
+# comics.each { |issue| puts issue.join' '}
 # p comics[0]
 # p comics.index(["Superman", 2013, 1, "Jeff Parker", "Chris Samnee", "DC", "Superhero", "Ongoing",
 #                      1, 399])
@@ -182,4 +208,31 @@ comics.each { |issue| puts issue.join' '}
 # update_quantity(3)
 # p get_id("Nah tho", 2, 4, "poops")
 
-p view_a_comic
+# p view_a_comic
+
+## DRIVER CODE
+puts "Welcome to Gutterz 1.0!"
+if DB.execute("SELECT * FROM issues") == []
+    
+    puts "Currently you can add a comic and view the info of any single issues you have added!"
+    puts "~~~~"
+    puts "Please add your first comic!"
+    puts "~~~~"
+    comic = get_info
+    add_a_comic(comic)
+end
+loop do
+    print "Add or view (type 'add', 'view', or 'exit')? "
+    operation = gets.chomp
+    if operation == 'add'
+        comic = get_info
+        add_a_comic(comic)
+    elsif operation == 'view'
+        view_a_comic
+    elsif operation == 'exit'
+        exit
+    else
+        puts "Please limit your inputs to 'add' or 'view' for now."
+        redo
+    end
+end
