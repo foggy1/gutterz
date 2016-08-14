@@ -1,0 +1,55 @@
+Every comic book will need the following attributes:
+
+COMIC BOOK
+~~~~
+Title*
+Issue number
+Writer*
+Artist*
+(Maybe Colorist* if I want to get granular)
+Publisher*
+Publishing schedule*
+Years** (see note)
+Face value*** (see note)
+Sale value
+Genre*
+Quantity
+
+Each category marked with one star will need its own table since it will bear a one-to-many relationship to each comic.  I don't know the best practice for handling instances of multiple authors or artists.  My gut feeling right now is that if an issue has multiple authors, I add a row to the author table dedicated to a string containing both authors, and I could work with a string splitter on "," in Ruby in order to check for multiple authors/artists when necessary.
+
+TITLE
+~~~~
+Name
+Year start
+Year finish
+**NOTE: Comics are dumb and otherwise identical titles have distinct publishing runs demarcated by parenthetical years of origin (X-Men 196x and X-Men 201x are distinct titles).  I think this is the best way to handle publishing years, since it will also allow me to help myself to the start year for each title.
+
+WRITERS
+~~~~
+Name
+
+ARTISTS
+~~~~
+Name
+
+PUBLISHERS
+~~~~
+Name
+
+At the moment I want this to be a dedicated tool for single issues, which are uniquely hard to keep track of compared to trade paperback collections.  Here the user will give the comic a type, like ongoing (regularly published for an initially undetermined period of time), limited (a mini-series), one-shot, or holiday (maybe special, i don't know).
+PUBLISHING SCHEDULE
+~~~~
+Type
+
+
+Comics currently have a sort-of-uniform price, but historically, there's a ton of prices.  I thought about collection those in a table in order to help myself to them later but... number-indexing a scattershot of numbers feels odd to me.  We'll keep track of the retail price and, to model a function that would be REALLY useful if we could pull from Ebay, we'll include an expected current sales value.
+
+
+GENRES
+~~~~
+Genre
+
+
+
+
+***I thought about storing prices in their own table: since, say, 299 cents is going to be a common face value of a comic, it's technically a one to many.  But it'll be cumbersome and for no good reason to keep a table of these values. For instance I have a good reason to search to see if I have a certain creator first, since it's useful to have a tightly organized list of creators; but checking to see whether or not i have a table with 299 in it before popping 299 into a table... no thanks.
