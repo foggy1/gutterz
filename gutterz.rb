@@ -69,9 +69,18 @@ def view_a_comic
     # if more than one pops up, we'll have an array longer than one.  In that case, we'll
     # use basic info and pick out the years and then format a string with the title and year
     # asking which one they meant.
-    comic_array = narrow_it_down(title, number)
- 
-
+    title, year, number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
+    cover_price = price.to_f / 100
+    puts "~~~~~~~~~~~~~~~"
+    puts "#{title}(#{year}) \##{number}"
+    puts "Writer: #{writer}"
+    puts "Artist: #{artist}"
+    puts "Publisher: #{publisher}"
+    puts "Genre: #{genre}"
+    puts "Type: #{schedule}"
+    puts "Copies: #{quantity}"
+    puts "Cover price: #{cover_price}"
+    puts "~~~~~~~~~~~~~~~"
 end
 
 # Functionally decompose the part of the comic viewing method where
@@ -89,10 +98,10 @@ def narrow_it_down(title, number)
         puts "Which exact series did you want that issue from (enter its index number to the left)?: "
         index = gets.to_i
         comic = DB.execute(BASIC_INFO_VIEW + " WHERE issues.id = (?)", [index])
-        return comic
+        return comic[0]
     else
         comic = narrow_comic_search
-        return comic
+        return comic[0]
     end
 end
 
@@ -116,7 +125,7 @@ def update_quantity(comic_id)
                                   join issues on titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
                                   artists on issues.artist_id = artists.id join publishers on 
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])
+                                  genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])[0]
     puts "You already have #{quantity} copies of #{title} (#{year}) \##{number}."
     print "How many copies of #{title} (#{year}) \##{number} do you want to add (or type 'none')? "
     add_quantity = gets.chomp
