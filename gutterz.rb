@@ -27,7 +27,8 @@ BASIC_INFO_VIEW = <<-SQL
 # and the cover price.  We will prompt the user for these things in turn, and then
 # pass them into this function, which will be the rudimentary function by which things
 # are first added to the database.
-def add_a_comic(info_array)
+def add_a_comic
+    info_array = get_info
     title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = info_array
     # First insert compartmentalized values into their respective tables
     if get_id(title, year, issue_number, schedule)
@@ -218,15 +219,13 @@ if DB.execute("SELECT * FROM issues") == []
     puts "~~~~"
     puts "Please add your first comic!"
     puts "~~~~"
-    comic = get_info
-    add_a_comic(comic)
+    add_a_comic
 end
 loop do
     print "Add or view (type 'add', 'view', or 'exit')? "
     operation = gets.chomp
     if operation == 'add'
-        comic = get_info
-        add_a_comic(comic)
+        add_a_comic
     elsif operation == 'view'
         view_a_comic
     elsif operation == 'exit'
