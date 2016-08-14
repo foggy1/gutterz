@@ -71,10 +71,16 @@ def view_a_comic
     # if more than one pops up, we'll have an array longer than one.  In that case, we'll
     # use basic info and pick out the years and then format a string with the title and year
     # asking which one they meant.
-    title, year, number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
+    comic_title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
+    if comic_title == '' || issue_number == nil
+        puts "You don't own or have not entered #{title} \##{number} yet."
+        puts "Try adding it or viewing something else."
+        puts "~~~~"
+        return
+    end
     cover_price = price.to_f / 100
     puts "~~~~~~~~~~~~~~~"
-    puts "#{title}(#{year}) \##{number}"
+    puts "#{comic_title}(#{year}) \##{issue_number}"
     puts "Writer: #{writer}"
     puts "Artist: #{artist}"
     puts "Publisher: #{publisher}"

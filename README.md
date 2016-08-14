@@ -17,3 +17,14 @@ So then **gutterz**, affectionately named for the space between comic panels (wh
 2. I want to be able to easily search whether or not I have an issue.
 
 I might add some more features and some might just emerge from how I set up the database.  But these are my initial thoughts on **gutterz**.
+
+## gutterz 1.0 (August 13th)
+As of this date **gutterz** can perform two basic functions: it can add a comic to a database with rudimentary info and it can view any single issue within the database according to a title and issue number.  It can also sort out an exception for each of those functions: if you attempt to add a title that is already in the database, **gutterz** will offer to allow you to increase the quantity value of that title instead.  
+
+Additionally, because the people running Marvel and DC are not that bright sometimes, there are several different editions of a comic with the same title and number (think X-Men #4 from back in the 1960's and X-Men #4 from Brian Wood's run a few years ago).  I don't want to make the user enter twenty things to get to an issue, so if there is more than one instance of, say, X-Men #4, **gutterz** will catch it, list all of those instance for you, and allow you to select the one that you meant via an identifying value.
+
+## Plans for future updates
+- Automate entry for a range of values (let the user enter a range of, say, 25-50 and enter all those X-men issues at once)
+- Add writer, artist, publisher, and genre searches
+- Automate a function that will tell me which issues are missing in some range of some title
+- Clean up the code because it is morally obligatory once you've seen it
