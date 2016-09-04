@@ -5,10 +5,11 @@ require_relative 'table_maker'
 require_relative 'view'
 require_relative 'controller'
 require_relative 'sql_constants'
+require_relative 'sql_parser'
+require_relative 'floppy_factory'
+require_relative 'floppy'
 
-
-TableMaker.make_table
-# binding.pry
+Controller.new().run
 # Given that there is a core cross-section of data that I want to work with, this is the master view
 # that will give me all of the single issues in my collection.  I append specific WHERE constraints
 # whenever I want to get more specific
