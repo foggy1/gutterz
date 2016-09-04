@@ -56,7 +56,8 @@ class View
           puts "~~~~"
     end
 
-    def self.display_info(found_array, index=0)
+    def self.display_info(found_array, index)
+      index = 0 if !index
       floppy = found_array[index]
       puts "~~~~~~~~~~~~~~~"
       puts "#{floppy.title}(#{floppy.year}) \##{floppy.issue_number}"
