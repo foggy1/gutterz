@@ -32,15 +32,15 @@
     CREATE_TITLE_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS titles (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            title VARCHAR(255),
+            UNIQUE(title)
         )
     SQL
 
     CREATE_YEAR_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS years (
             id INTEGER PRIMARY KEY,
-            year INT,
+            year DATE,
             UNIQUE(year)
         )
     SQL
@@ -48,32 +48,32 @@
     CREATE_SCHEDULE_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS schedules (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            schedule VARCHAR(255),
+            UNIQUE(schedule)
         )
     SQL
 
     CREATE_WRITER_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS writers (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            writer VARCHAR(255),
+            UNIQUE(writer)
         )
         SQL
 
     CREATE_ARTIST_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS artists (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            artist VARCHAR(255),
+            UNIQUE(artist)
         )
         SQL
 
     CREATE_COLORIST_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS colorists (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            colorist VARCHAR(255),
+            UNIQUE(colorist)
         )
         SQL
 
@@ -81,22 +81,22 @@
     CREATE_PUBLISHER_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS publishers (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            publisher VARCHAR(255),
+            UNIQUE(publisher)
         )
         SQL
 
     CREATE_GENRE_TABLE = <<-SQL
         CREATE TABLE IF NOT EXISTS genres (
             id INTEGER PRIMARY KEY,
-            name VARCHAR(255),
-            UNIQUE(name)
+            genre VARCHAR(255),
+            UNIQUE(genre)
         )
         SQL
 
     BASIC_INFO_VIEW = <<-SQL
-                                      select titles.name, years.year, issues.number, 
-                                      writers.name, artists.name, publishers.name, genres.name, schedules.name,
+                                      select titles.title, years.year, issues.number, 
+                                      writers.writer, artists.artist, publishers.publisher, genres.genre, schedules.schedule,
                                       issues.quantity, issues.cover_price 
                                       from titles join years on years.id = issues.year_id
                                       join issues on titles.id = issues.title_id 

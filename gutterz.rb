@@ -1,5 +1,6 @@
 
 require 'sqlite3'
+require 'pry'
 require_relative 'table_maker'
 require_relative 'view'
 require_relative 'controller'
@@ -8,6 +9,7 @@ require_relative 'sql_constants'
 
 # DB.results_as_hash = true
 TableMaker.make_table
+# binding.pry
 # Given that there is a core cross-section of data that I want to work with, this is the master view
 # that will give me all of the single issues in my collection.  I append specific WHERE constraints
 # whenever I want to get more specific
@@ -28,22 +30,23 @@ def add_a_comic(info_array)
         return
     end
     # First insert compartmentalized values into their respective tables
-    DB.execute("INSERT OR IGNORE INTO titles (name) VALUES (?)", [title])
+    DB.execute("INSERT OR IGNORE INTO titles (title) VALUES (?)", [title])
     DB.execute("INSERT OR IGNORE INTO years(year) VALUES (?)", [year])
-    DB.execute("INSERT OR IGNORE INTO writers (name) VALUES (?)", [writer])
-    DB.execute("INSERT OR IGNORE INTO artists (name) VALUES (?)", [artist])
-    DB.execute("INSERT OR IGNORE INTO publishers (name) VALUES (?)", [publisher])
-    DB.execute("INSERT OR IGNORE INTO genres (name) VALUES (?)", [genre])
-    DB.execute("INSERT OR IGNORE INTO schedules (name) VALUES (?)", [schedule])
+    DB.execute("INSERT OR IGNORE INTO writers (writer) VALUES (?)", [writer])
+    DB.execute("INSERT OR IGNORE INTO artists (artist) VALUES (?)", [artist])
+    DB.execute("INSERT OR IGNORE INTO publishers (publisher) VALUES (?)", [publisher])
+    DB.execute("INSERT OR IGNORE INTO genres (genre) VALUES (?)", [genre])
+    DB.execute("INSERT OR IGNORE INTO schedules (schedule) VALUES (?)", [schedule])
     # Then grab the relevant id's to be foreign keys
-    title_id = DB.execute("SELECT id FROM titles WHERE name=(?)", [title])
+    title_id = DB.execute("SELECT id FROM titles WHERE title=(?)", [title])
     year_id = DB.execute("SELECT id FROM years WHERE year=(?)", [year])
-    writer_id = DB.execute("SELECT id FROM writers WHERE name=(?)", [writer])
-    artist_id = DB.execute("SELECT id FROM artists WHERE name=(?)", [artist])
-    publisher_id = DB.execute("SELECT id FROM publishers WHERE name=(?)", [publisher])
-    genre_id = DB.execute("SELECT id FROM genres WHERE name=(?)", [genre])
-    schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
+    writer_id = DB.execute("SELECT id FROM writers WHERE writer=(?)", [writer])
+    artist_id = DB.execute("SELECT id FROM artists WHERE artist=(?)", [artist])
+    publisher_id = DB.execute("SELECT id FROM publishers WHERE publisher=(?)", [publisher])
+    genre_id = DB.execute("SELECT id FROM genres WHERE genre=(?)", [genre])
+    schedule_id = DB.execute("SELECT id FROM schedules WHERE schedule=(?)", [schedule])
     # Then put it all together in the issue table
+     # binding.pry
     DB.execute("INSERT INTO issues (title_id, year_id, number, writer_id, artist_id, publisher_id, genre_id,
                        schedule_id, quantity, cover_price)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -132,9 +135,9 @@ end
 # We get the relevant foreign keys, then find the primary key in issues where they converge
 # If no info is returned, this method returns nil, otherwise, it returns the id value
 def get_id(title, year, issue_number, schedule)
-    title_id = DB.execute("SELECT id FROM titles WHERE name=(?)", [title])
+    title_id = DB.execute("SELECT id FROM titles WHERE title=(?)", [title])
     year_id = DB.execute("SELECT id FROM years WHERE year=(?)", [year])
-    schedule_id = DB.execute("SELECT id FROM schedules WHERE name=(?)", [schedule])
+    schedule_id = DB.execute("SELECT id FROM schedules WHERE schedule=(?)", [schedule])
     comic_id = DB.execute("select id from issues where title_id = (?) and year_id = (?) and number = (?) and schedule_id = (?)", 
                                        [title_id, year_id, issue_number, schedule_id])
     if comic_id[0] == nil
@@ -248,7 +251,8 @@ if DB.execute("SELECT * FROM issues") == []
     puts "~~~~"
     puts "Please add your first comic!"
     puts "~~~~"
-    add_a_comic
+    info_array = new_get_info
+    add_a_comic(info_array)
 end
 loop do
     print "Add or view (type 'add', 'view', or 'exit')? "
