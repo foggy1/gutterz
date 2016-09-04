@@ -1,23 +1,17 @@
 
 require 'sqlite3'
 require_relative 'table_maker'
-# DB.results_as_hash = true
+require_relative 'view'
+require_relative 'controller'
+require_relative 'sql_constants'
 
+
+# DB.results_as_hash = true
+TableMaker.make_table
 # Given that there is a core cross-section of data that I want to work with, this is the master view
 # that will give me all of the single issues in my collection.  I append specific WHERE constraints
 # whenever I want to get more specific
-BASIC_INFO_VIEW = <<-SQL
-                                  select titles.name, years.year, issues.number, 
-                                  writers.name, artists.name, publishers.name, genres.name, schedules.name,
-                                  issues.quantity, issues.cover_price 
-                                  from titles join years on years.id = issues.year_id
-                                  join issues on titles.id = issues.title_id 
-                                  join writers on issues.writer_id = writers.id 
-                                  join artists on issues.artist_id = artists.id 
-                                  join publishers on issues.publisher_id = publishers.id 
-                                  join genres on issues.genre_id = genres.id 
-                                  join schedules on schedules.id = issues.schedule_id
-                          SQL
+
 
 
 # The basic info of any comic will be the same: title, year, issue number, writer, artist,
