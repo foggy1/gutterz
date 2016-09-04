@@ -22,7 +22,8 @@ class Controller
          title, issue_number = @view.view_prompt
          found = ComicSearch.basic_search(floppies, title, issue_number)
          @view.none_found(title, issue_number); redo if found.length == 0
-         @view.display_info(found.first)
+         intended_index = @view.too_many_found(found) if found.length > 1
+         @view.display_info(found, intended_index)
          # binding.pry
          elsif operation == 'exit'
            exit

@@ -41,15 +41,6 @@ class View
         return info_array
     end
 
-    def self.view_a_comic
-
-      comic_title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
-      if comic_title == '' || issue_number == nil
-
-          return
-      end
-
-    end
 
     def self.view_prompt
       print "What comic would you like to view? Enter its title: "
@@ -65,7 +56,8 @@ class View
           puts "~~~~"
     end
 
-    def self.display_info(floppy)
+    def self.display_info(found_array, index=0)
+      floppy = found_array[index]
       puts "~~~~~~~~~~~~~~~"
       puts "#{floppy.title}(#{floppy.year}) \##{floppy.issue_number}"
       puts "Writer: #{floppy.writer}"
@@ -76,6 +68,13 @@ class View
       puts "Copies: #{floppy.quantity}"
       puts "Cover price: #{floppy.cover_price}"
       puts "~~~~~~~~~~~~~~~"
+    end
+
+    def self.too_many_found(search_results)
+      puts "Whoops! You have that issue number from more than one series with that title!"
+      search_results.length.times { |n| puts " #{n+1} #{search_results[n].title}(#{search_results[n].year}) \##{search_results[n].issue_number} #{search_results[n].schedule}" }
+      print "Enter the number of the series you intended: "
+      gets.to_i - 1
     end
 
 end
