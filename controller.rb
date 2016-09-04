@@ -12,7 +12,7 @@ class Controller
         @table_maker.make_table
         # floppy_args = 
         
-        floppies = @floppy_factorynew_batch(@sql_parser.read_table)
+        current_floppies = @floppy_factory.new_batch(@sql_parser.read_table)
         puts "Welcome to Gutterz 1.1!"
         loop do
           print "Add or view (type 'add', 'view', or 'exit')? "
@@ -20,11 +20,16 @@ class Controller
           if operation == 'add'
             info_array = @view.new_get_info
             new_floppy = @floppy_factory.make_one(@floppy_factory.convert_to_args(info_array))
-            @comic_collector.add_floppy(new_floppy)
+            # binding.pry
+            if !@comic_search.already_own?(new_floppy, current_floppies)
+              @comic_collector.add_floppy(new_floppy) 
+              current_floppies << new_floppy
+            end
+            #quantity will go in the above if statement
             # add_a_batch(info_array)c
          elsif operation == 'view'
            title, issue_number = @view.view_prompt
-           found = @comic_search.basic_search(floppies, title, issue_number)
+           found = @comic_search.basic_search(current_floppies, title, issue_number)
            @view.none_found(title, issue_number); redo if found.length == 0
            intended_index = @view.too_many_found(found) if found.length > 1
            @view.display_info(found, intended_index)

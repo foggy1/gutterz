@@ -8,5 +8,9 @@ module ComicSearch
     # search_results.select()
   end
 
+    def self.already_own?(new_floppy, floppies)
+      new_collection = floppies << new_floppy
+      new_collection.uniq == floppies
+    end
 
 end
