@@ -16,6 +16,7 @@ class Controller
           operation = gets.chomp
           if operation == 'add'
             info_array = @view.new_get_info
+            FloppyFactory.convert_to_args(info_array)
             add_a_comic(info_array)
             add_a_batch(info_array)
          elsif operation == 'view'
