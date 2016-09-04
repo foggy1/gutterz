@@ -30,7 +30,10 @@ class Controller
          elsif operation == 'view'
            title, issue_number = @view.view_prompt
            found = @comic_search.basic_search(current_floppies, title, issue_number)
-           @view.none_found(title, issue_number); redo if found.length == 0
+           if found.length == 0
+            @view.none_found(title, issue_number)
+            redo
+          end
            intended_index = @view.too_many_found(found) if found.length > 1
            @view.display_info(found, intended_index)
          # binding.pry
