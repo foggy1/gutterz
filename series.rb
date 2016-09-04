@@ -1,13 +1,10 @@
 # Class for a comics series; so, Uncanny X-Men(1963)
 class Series
     def initialize(args={})
-        @schedule = args.fetch(:schedule)
         @title = args.fetch(:title)
-        @publisher = args.fetch(:publisher)
-        @genre = args.fetch(:genre)
-        @year = args.fetch(:year)
-        #hook message for single issues
-        post_initialize(args)
+        @year = args.fecth(:year)
+        @floppies = args.fetch(:floppies)
+        @total_issues = args.fetch(:total_issues, nil)
     end
 end
 

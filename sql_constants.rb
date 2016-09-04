@@ -2,6 +2,8 @@
 # around with them and never have to type all this CREATE TABLE
 # nonsense again.
     DB = SQLite3::Database.new("gutterz.db")
+    DB.results_as_hash = true
+
     
     # Let's heredoc a buttload of create tables
     CREATE_ISSUE_TABLE = <<-SQL
