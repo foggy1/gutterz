@@ -23,9 +23,6 @@ Controller.new().run
 # We'll then check to see if the issue exists and, if it does, prompt the user to update its quantity
 # The method then inserts any new values into the foreign key tables
 # It then gets those foreign keys, whether they're new or not, and puts them all in the issue table.
-def add_a_comic(info_array)
-    
-end
 
 # In order to view a comic, we will prompt the user for a title and issue number
 # This should be a unique identifier, unless there is a limited series or earlier/later serial
@@ -37,25 +34,6 @@ end
 # Grab all the relevant info for the database for a given title and issue number
 # If these criteria return more than one item, we grab a few more characteristics to narrow it down
 # Then prompt the user to enter their exact choice via its issue id
-def narrow_it_down(title, number)
-    narrow_comic_search = DB.execute(BASIC_INFO_VIEW + " WHERE titles.title = (?) and issues.number = (?)", [title, number])
-    if narrow_comic_search.length > 1
-        
-        puts "Whoops! You have that issue number from more than one series!"
-        narrow_comic_search.each do |comic|
-             title, year, issue_number, schedule = comic[0], comic[1], comic[2], comic[7]
-             current_id = get_id(title, year, issue_number, schedule)
-             puts "#{current_id}: #{title}(#{year}) #{issue_number} #{schedule}"
-        end
-        puts "Which exact series did you want that issue from (enter its index number to the left)?: "
-        index = gets.to_i
-        comic = DB.execute(BASIC_INFO_VIEW + " WHERE issues.id = (?)", [index])
-        return comic[0]
-    else
-        comic = narrow_comic_search
-        return comic[0]
-    end
-end
 
 
 # This method takes the comic id from get_id as an argument
