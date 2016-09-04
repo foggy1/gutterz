@@ -88,7 +88,7 @@ end
 # If these criteria return more than one item, we grab a few more characteristics to narrow it down
 # Then prompt the user to enter their exact choice via its issue id
 def narrow_it_down(title, number)
-    narrow_comic_search = DB.execute(BASIC_INFO_VIEW + " WHERE titles.name = (?) and issues.number = (?)", [title, number])
+    narrow_comic_search = DB.execute(BASIC_INFO_VIEW + " WHERE titles.title = (?) and issues.number = (?)", [title, number])
     if narrow_comic_search.length > 1
         
         puts "Whoops! You have that issue number from more than one series!"
