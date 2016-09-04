@@ -9,11 +9,14 @@ require_relative 'table_maker'
 BASIC_INFO_VIEW = <<-SQL
                                   select titles.name, years.year, issues.number, 
                                   writers.name, artists.name, publishers.name, genres.name, schedules.name,
-                                  issues.quantity, issues.cover_price from titles join years on years.id = issues.year_id
-                                  join issues on titles.id = issues.title_id join writers on issues.writer_id = writers.id join 
-                                  artists on issues.artist_id = artists.id join publishers on 
-                                  issues.publisher_id = publishers.id join genres on issues.genre_id = 
-                                  genres.id join schedules on schedules.id = issues.schedule_id
+                                  issues.quantity, issues.cover_price 
+                                  from titles join years on years.id = issues.year_id
+                                  join issues on titles.id = issues.title_id 
+                                  join writers on issues.writer_id = writers.id 
+                                  join artists on issues.artist_id = artists.id 
+                                  join publishers on issues.publisher_id = publishers.id 
+                                  join genres on issues.genre_id = genres.id 
+                                  join schedules on schedules.id = issues.schedule_id
                           SQL
 
 
