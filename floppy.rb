@@ -3,6 +3,7 @@
 class Floppy
     def initialize(args)
         @schedule = args.fetch(:schedule)
+        @issue_number = args.fetch(:number)
         @title = args.fetch(:title)
         @publisher = args.fetch(:publisher)
         @genre = args.fetch(:genre)

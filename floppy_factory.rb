@@ -1,5 +1,5 @@
 module FloppyFactory
   def self.make(floppy_args)
-    floppy_args.each { |args| Floppy.new(args) }
+    floppy_args.map{ |args| Floppy.new(args) }
   end
 end

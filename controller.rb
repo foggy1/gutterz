@@ -6,11 +6,10 @@ class Controller
 
     def run
         @table_maker.make_table
-        floppy_args = SQLParser.read_table
-        binding.pry
+        # floppy_args = 
         
-        FloppyFactory.make(floppy_args)
-
+        floppies = FloppyFactory.make(SQLParser.read_table)
+        binding.pry
         puts "Welcome to Gutterz 1.1!"
         loop do
           print "Add or view (type 'add', 'view', or 'exit')? "
