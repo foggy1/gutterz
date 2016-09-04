@@ -42,29 +42,40 @@ class View
     end
 
     def self.view_a_comic
+
+      comic_title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
+      if comic_title == '' || issue_number == nil
+
+          return
+      end
+
+    end
+
+    def self.view_prompt
       print "What comic would you like to view? Enter its title: "
       title = gets.chomp
       print "What issue number? "
       number = gets.to_i
-      comic_title, year, issue_number, writer, artist, publisher, genre, schedule, quantity, price = narrow_it_down(title, number)
-      if comic_title == '' || issue_number == nil
-          puts "You don't own or have not entered #{title} \##{number} yet."
-          puts "Try adding it or viewing something else."
-          puts "~~~~"
-          return
-      end
-      cover_price = price.to_f / 100
-      puts "~~~~~~~~~~~~~~~"
-      puts "#{comic_title}(#{year}) \##{issue_number}"
-      puts "Writer: #{writer}"
-      puts "Artist: #{artist}"
-      puts "Publisher: #{publisher}"
-      puts "Genre: #{genre}"
-      puts "Type: #{schedule}"
-      puts "Copies: #{quantity}"
-      puts "Cover price: #{cover_price}"
-      puts "~~~~~~~~~~~~~~~"
+      [title, number]
     end
 
+    def self.none_found(title, issue_number)
+          puts "You don't own or have not entered #{title} \##{issue_number} yet."
+          puts "Try adding it or viewing something else."
+          puts "~~~~"
+    end
+
+    def self.display_info(floppy)
+      puts "~~~~~~~~~~~~~~~"
+      puts "#{floppy.title}(#{floppy.year}) \##{floppy.issue_number}"
+      puts "Writer: #{floppy.writer}"
+      puts "Artist: #{floppy.artist}"
+      puts "Publisher: #{floppy.publisher}"
+      puts "Genre: #{floppy.genre}"
+      puts "Type: #{floppy.schedule}"
+      puts "Copies: #{floppy.quantity}"
+      puts "Cover price: #{floppy.cover_price}"
+      puts "~~~~~~~~~~~~~~~"
+    end
 
 end

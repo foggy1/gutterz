@@ -9,7 +9,7 @@ class Controller
         # floppy_args = 
         
         floppies = FloppyFactory.make(SQLParser.read_table)
-        binding.pry
+        # binding.pry
         puts "Welcome to Gutterz 1.1!"
         loop do
           print "Add or view (type 'add', 'view', or 'exit')? "
@@ -19,7 +19,11 @@ class Controller
             add_a_comic(info_array)
             add_a_batch(info_array)
          elsif operation == 'view'
-           view_a_comic
+         title, issue_number = @view.view_prompt
+         found = ComicSearch.basic_search(floppies, title, issue_number)
+         @view.none_found(title, issue_number); redo if found.length == 0
+         @view.display_info(found.first)
+         # binding.pry
          elsif operation == 'exit'
            exit
           else

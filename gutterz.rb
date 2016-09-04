@@ -8,6 +8,7 @@ require_relative 'sql_constants'
 require_relative 'sql_parser'
 require_relative 'floppy_factory'
 require_relative 'floppy'
+require_relative 'comic_search'
 
 Controller.new().run
 # Given that there is a core cross-section of data that I want to work with, this is the master view
