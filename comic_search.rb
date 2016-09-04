@@ -8,9 +8,14 @@ module ComicSearch
     # search_results.select()
   end
 
-    def self.already_own?(new_floppy, floppies)
-      new_collection = floppies << new_floppy
-      new_collection.uniq == floppies
+    def self.already_own?(new_args, floppies)
+      binding.pry
+      already_owned = floppies.select { |floppy| new_args[:title] == floppy.title &&
+                                                  new_args[:year] == floppy.year &&
+                                                  new_args[:number] == floppy.issue_number &&
+                                                  new_args[:schedule] == floppy.schedule
+                                  }.length
+      already_owned > 0
     end
 
 end

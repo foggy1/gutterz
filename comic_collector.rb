@@ -34,5 +34,8 @@ module ComicCollector
   end
 
 
+def self.update_database(floppies)
+  floppies.each { |floppy| add_floppy(floppy) }
+end
 
 end

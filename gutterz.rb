@@ -46,9 +46,7 @@ def update_quantity(comic_id)
                                   artists on issues.artist_id = artists.id join publishers on 
                                   issues.publisher_id = publishers.id join genres on issues.genre_id = 
                                   genres.id join schedules on schedules.id = issues.schedule_id WHERE issues.id = (?)", [comic_id])[0]
-    puts "You already have #{quantity} copies of #{title} (#{year}) \##{number}."
-    print "How many copies of #{title} (#{year}) \##{number} do you want to add (or type 'none')? "
-    add_quantity = gets.chomp
+
     if add_quantity == 'none'
         return false
     else

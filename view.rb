@@ -78,4 +78,10 @@ class View
       gets.to_i - 1
     end
 
+    def self.add_to_existing(new_floppy)
+      puts "You already have #{new_floppy.quantity} copies of #{new_floppy.title} (#{new_floppy.year}) \##{new_floppy.issue_number}."
+      print "How many copies of #{new_floppy.title} (#{new_floppy.year}) \##{new_floppy.number} do you want to add (or type 'none')? "
+      add_quantity = gets.to_i
+    end
+
 end

@@ -12,7 +12,12 @@ module FloppyFactory
 
  def self.convert_to_args(info_array)
   almost_args = [[:title, :year, :number, :writer, :artist, :publisher, :genre, :schedule, :quantity, :cover_price], info_array].transpose
-  Hash[almost_args]
+  floppy_args = Hash[almost_args]
+  floppy_args[:year] = floppy_args[:year].to_i
+  floppy_args[:number] = floppy_args[:number].to_i
+  floppy_args[:quantity] = floppy_args[:quantity].to_i
+  floppy_args[:cover_price] = floppy_args[:cover_price].to_i
+  floppy_args
   # binding.pry
  end
 

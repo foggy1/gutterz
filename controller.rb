@@ -19,11 +19,14 @@ class Controller
           operation = gets.chomp
           if operation == 'add'
             info_array = @view.new_get_info
-            new_floppy = @floppy_factory.make_one(@floppy_factory.convert_to_args(info_array))
-            # binding.pry
-            if !@comic_search.already_own?(new_floppy, current_floppies)
-              @comic_collector.add_floppy(new_floppy) 
+            new_args = @floppy_factory.convert_to_args(info_array)
+            if !@comic_search.already_own?(new_args, current_floppies)
+
+              new_floppy = @floppy_factory.make_one(new_args)
+              binding.pry
               current_floppies << new_floppy
+            else
+              quantity_to_add = @view.add_to_existing(new_floppy)
             end
             #quantity will go in the above if statement
             # add_a_batch(info_array)c
