@@ -108,3 +108,9 @@
                                       join genres on issues.genre_id = genres.id 
                                       join schedules on schedules.id = issues.schedule_id
                               SQL
+
+
+UPDATE_COMIC_QUANTITY = <<-SQL
+                                                        update issues
+                                                        set issues.quantity = #{new_quantity}
+                                                        

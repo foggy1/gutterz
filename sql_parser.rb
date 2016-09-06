@@ -8,4 +8,19 @@ module SQLParser
     end 
     floppy_args_symbol_keys
   end
+
+  def self.update_quantity(floppy, new_quantity)
+    DB.execute("UPDATE issues
+                            SET issues.quantity = (?)
+                            WHERE title_id IN
+                            (SELECT title_id  from titles join years on years.id = issues.year_id
+                                      join issues on titles.id = issues.title_id 
+                                      join writers on issues.writer_id = writers.id 
+                                      join artists on issues.artist_id = artists.id 
+                                      join publishers on issues.publisher_id = publishers.id 
+                                      join genres on issues.genre_id = genres.id 
+                                      join schedules on schedules.id = issues.schedule_id
+                                      WHERE titles.title = floppy.title
+  end
+
 end

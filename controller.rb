@@ -23,7 +23,7 @@ class Controller
             if !@comic_search.already_own?(new_args, current_floppies)
 
               new_floppy = @floppy_factory.make_one(new_args)
-              binding.pry
+              comic_collector.add_floppy(new_floppy)
               current_floppies << new_floppy
             else
               quantity_to_add = @view.add_to_existing(new_floppy)
